@@ -5,10 +5,20 @@ import matplotlib.image as mpimg
 import numpy as np
 import cv2
 import time
+import argparse
+
 #%matplotlib inline
-debug = 0
+parser = argparse.ArgumentParser(description='Udacity-P1: Basic Lane Detection')
+parser.add_argument('-d', action="store", dest="debug" )
+
+args=parser.parse_args()
+if (args.debug == '1'):
+      debug = 1
+else :
+      debug = 0
 
 print ('\n\nProject: P1, Vijay D. \nBasic Lane Detection')
+if (debug == 1): print ('\nDebug Mode ON...\n')
 print ('\nPICK A VIDEO:    -OR-')
 print ('___________________________________________')
 print ('1:  Video w/solid white right lane marker')
@@ -47,6 +57,9 @@ elif (choice == '7'):   name   = 'test_images\solidYellowCurve.jpg'
 elif (choice == '8'):   name   = 'test_images\solidYellowCurve2.jpg'
 elif (choice == '9'):   name   = 'test_images\shadow.jpg'
 elif (choice == '10'):  name   = 'test_images\whiteCarLaneSwitch.jpg'
+#elif (choice == '11'):  name   = 'extra_images\deepCreek_1.jpg'
+#elif (choice == '12'):  name   = 'extra_images\deepCreek_2.jpg'
+#elif (choice == '13'):  name   = 'extra_images\deepCreek_3.jpg'
 else:                  
     exit()
 
@@ -66,12 +79,12 @@ while True:
         if (debug): print ("Frame: ", framenum)
     
     gray = cv2.cvtColor(image,cv2.COLOR_RGB2GRAY)
-   
+    
     # Define a kernel size and apply Gaussian smoothing
     kernel_size = 9 #13  #must be odd
     blur_gray = cv2.GaussianBlur(gray,(kernel_size, kernel_size),0)
     if (debug):  cv2.imshow('Blur_Gray', blur_gray)
-
+    
     mask_white = cv2.inRange(blur_gray, 150, 255)
     #use inRange() to perform color detection (by specifying the lower limit and upper limits of thecolor to detect)
         
@@ -81,6 +94,7 @@ while True:
     edges = cv2.Canny(blur_gray, low_threshold, high_threshold, apertureSize=3) #old = mask_white
     if (debug): cv2.imshow('Cannyedges', edges)
     
+
     # Next we'll create a masked edges image using cv2.fillPoly()
     mask = np.zeros_like(edges) 
     ignore_mask_color = 200   
@@ -181,13 +195,14 @@ while True:
     totlines = 'Total detected lines:'+str(l)+' Actual mapped:'+str(k)+' (Left:'+str(i)+' Right:'+str(j)+')'
     lines_edges = cv2.addWeighted(image, 0.8, line_image, 1, 0)
     
-    quitinstr ='Press Ctrl+C to quit processing'
+    quitinstr ='To Quit: 1. Click Here 2. ESC'
 
     if (video): 
         cv2.putText(lines_edges, fram, (10,15), font, 0.5, (255,255,255), 0, cv2.LINE_AA)
         
     cv2.putText(lines_edges, totlines, (10,30), font, 0.5, (0,255,255), 0, cv2.LINE_AA)
-    cv2.putText(lines_edges, quitinstr, (imshape[1]-270,30), font, 0.5, (0,0,255), 0, cv2.LINE_AA)
+    cv2.putText(lines_edges, quitinstr, (imshape[1]-315,30), font, 0.5, (255,255,0), 0, cv2.LINE_AA)
+    cv2.putText(lines_edges, name, (int(imshape[1]/2-120),imshape[0]-5), font, 0.5, (255,255,0), 0, cv2.LINE_AA)
     cv2.imshow('lines_edges', lines_edges)
     
     if (video): 
@@ -199,7 +214,7 @@ while True:
         if kk == 27: #ESC key
             break
 
-if (debug == 0): print ('Debug flag can be turned ON (=1) inside code for interim output')
+if (debug == 0): print ('Use flag "-d 1" to turn ON interim output for debugging purpose')
 
 if (video): cap.release()
 else: 
