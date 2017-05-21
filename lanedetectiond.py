@@ -89,8 +89,8 @@ while True:
     #use inRange() to perform color detection (by specifying the lower limit and upper limits of thecolor to detect)
         
     # Define parameters for Canny Edge Det
-    low_threshold = 60 #60 old 50
-    high_threshold = 180 #180 old 150
+    low_threshold = 80 #60 old 50
+    high_threshold = 120 #180 old 150
     edges = cv2.Canny(blur_gray, low_threshold, high_threshold, apertureSize=3) #old = mask_white
     if (debug): cv2.imshow('Cannyedges', edges)
     
@@ -182,8 +182,8 @@ while True:
         cv2.circle(line_image, (x1,y1), 10, (255,255,0), -1)
         cv2.circle(line_image, (x2,y2), 10, (255,255,0), -1)
     #Drawing the two lane lines
-    cv2.line(line_image,(xnegcbtm,int(imshape[0])),(xnegctop,int(2*imshape[0]/3)),(255,0,255),25)
-    cv2.line(line_image,(xposcbtm,int(imshape[0])),(xposctop,int(2*imshape[0]/3)),(255,0,255),25)
+    cv2.line(line_image,(xnegcbtm,int(imshape[0])),(xnegctop,int(2*imshape[0]/3)),(255,255,0),25)
+    cv2.line(line_image,(xposcbtm,int(imshape[0])),(xposctop,int(2*imshape[0]/3)),(255,255,0),25)
     
     # Create a "color" binary image to combine with line image : DOES NOT DO ANYTHING, same as CANNY_EDGES, ASK Q
     #color_edges = np.dstack((edges, edges, edges)) 
